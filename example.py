@@ -1,19 +1,3 @@
-Flask-TokenAuth
-===============
-
-Provides Token authentication for Flask routes.
-
-Installation
-------------
-The easiest way to install this is through pip.
-```
-pip install Flask-TokenAuth
-```
-
-Basic authentication example
-----------------------------
-
-```python
 from flask import Flask, g
 from flask_tokenauth import TokenAuth, TokenManager
 
@@ -25,6 +9,7 @@ token_manager = TokenManager(secret_key=secret_key)
 users = {
     'bob': None
 }
+
 
 @app.route('/')
 @token_auth.token_required
@@ -49,11 +34,3 @@ def verify_token(token):
 
 if __name__ == '__main__':
     app.run()
-```
-
-Resources
----------
-
-- [Documentation](http://pythonhosted.org/Flask-TokenAuth)
-- [pypi](https://pypi.python.org/pypi/Flask-TokenAuth)
-

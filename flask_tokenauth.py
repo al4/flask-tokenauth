@@ -42,6 +42,8 @@ class TokenManager(object):
         return s.dumps({'id': name})
 
     def verify(self, token):
+        if not token:
+            return None
         s = Serializer(self.secret_key)
         try:
             data = s.loads(token)
@@ -105,6 +107,8 @@ class TokenAuth(object):
         @wraps(f)
         def decorated(*args, **kwargs):
             token = request.headers.get('X-Auth-Token')
+            if not token:
+                return self.auth_error_callback()
             if not self.authenticate(token):
                 return self.auth_error_callback()
             return f(*args, **kwargs)
