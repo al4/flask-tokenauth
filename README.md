@@ -1,11 +1,15 @@
 Flask-TokenAuth
 ===============
 
-Provides Token authentication for Flask routes.
+Flask module for token authentication, using itsdangerous for the serialization and crypto.
+
+This module borrows heavily from Flask-HTTPAuth, and Miguel Grinberg's blog at
+http://blog.miguelgrinberg.com/
+
+Many thanks to Miguel for his contributions!
 
 Installation
 ------------
-The easiest way to install this is through pip.
 ```
 pip install Flask-TokenAuth
 ```
@@ -22,9 +26,7 @@ secret_key = 'really big secret'
 token_auth = TokenAuth(secret_key=secret_key)
 token_manager = TokenManager(secret_key=secret_key)
 
-users = {
-    'bob': None
-}
+users = ['bob']
 
 @app.route('/')
 @token_auth.token_required
@@ -33,6 +35,7 @@ def index():
 
 
 @app.route('/token/<username>')
+# @auth.login_required <-- use another module for this
 def get_token(username=None):
     token = token_manager.generate(username)
     return token
@@ -50,6 +53,12 @@ def verify_token(token):
 if __name__ == '__main__':
     app.run()
 ```
+
+Footnotes
+---------
+Obviously, you will want to authenticate users before allowing them to generate a token.
+For this I suggest [Flask-HTTPAuth](http://pythonhosted.org/Flask-HTTPAuth) or a similar module.
+
 
 Resources
 ---------
