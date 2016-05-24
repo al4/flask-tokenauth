@@ -7,11 +7,13 @@ This module provides token-based authentication for Flask routes.
 :copyright: (C) 2016 by Alex Forbes.
 :license:   BSD, see LICENSE for more details.
 """
-from __future__ import print_function
+from __future__ import print_function, unicode_literals, absolute_import, \
+    division
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
 from functools import wraps
 from flask import request, make_response
+from six import string_types
 
 __author__ = 'alforbes'
 
@@ -94,7 +96,7 @@ class TokenAuth(object):
         @wraps(f)
         def decorated(*args, **kwargs):
             res = f(*args, **kwargs)
-            if type(res) == str:
+            if isinstance(res, string_types):
                 res = make_response(res)
                 res.status_code = 401
             if 'WWW-Authenticate' not in res.headers.keys():

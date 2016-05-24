@@ -1,4 +1,4 @@
-from __future__ import print_function
+from __future__ import print_function, unicode_literals
 from flask import Flask, jsonify, g
 from flask_tokenauth import TokenAuth, TokenManager
 from werkzeug.datastructures import Headers
@@ -23,7 +23,7 @@ class TokenAuthTestCase(unittest.TestCase):
         app.config['DEBUG'] = True
         app.config['TRAP_HTTP_EXCEPTIONS'] = True
 
-        secret_key = 'really big secret'
+        secret_key = u'really big secret'
         token_manager = TokenManager(secret_key)
 
         token_auth = TokenAuth(secret_key)
@@ -31,8 +31,9 @@ class TokenAuthTestCase(unittest.TestCase):
         @app.route('/token')
         def get_token():
             user = 'test_user'
-            token = token_manager.generate(user)
-            return jsonify({'token': token})
+            token = token_manager.generate(user).decode('utf-8')
+            doc = {'token': token}
+            return jsonify(doc)
 
         @app.route('/')
         def root():
@@ -54,7 +55,9 @@ class TokenAuthTestCase(unittest.TestCase):
 
     def get_token(self):
         response = self.client.get('/token')
-        return json.loads(response.data)['token']
+        data = response.data.decode('utf-8')
+        doc = json.loads(data)
+        return doc['token']
 
     def get_with_token_auth(self, path, token):
         """
@@ -90,7 +93,7 @@ class TestAuthToken(TokenAuthTestCase):
         """
         response = self.client.get('/token')
         self.assertEqual(response.status_code, 200)
-        self.assertIn('token', json.loads(response.data))
+        self.assertIn('token', json.loads(response.data.decode('utf-8')))
 
 
 class TestBase(TokenAuthTestCase):
@@ -159,7 +162,8 @@ class TestCustomVerify(TokenAuthTestCase):
         token = self.get_token()
         response = self.get_with_token_auth('/get_user', token)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.data)['user'], 'test_user')
+        self.assertEqual(json.loads(response.data.decode('utf-8'))['user'],
+                         'test_user')
 
 
 def suite():

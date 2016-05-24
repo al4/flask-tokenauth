@@ -9,7 +9,7 @@ from setuptools import setup
 
 setup(
     name='Flask-TokenAuth',
-    version='0.0.2',
+    version='0.1.0',
     url='http://github.com/al4/flask-tokenauth/',
     license='MIT',
     author='Alex Forbes',
@@ -29,7 +29,8 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
-        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.5',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Libraries :: Python Modules'
     ]
